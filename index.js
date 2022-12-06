@@ -3,6 +3,8 @@ require('dotenv').config();
 const fs = require('fs');
 const fsPath = require('path');
 
+const notifier = require('node-notifier');
+
 init();
 
 if ( (config.clearDownloads == false) && (config.clearTrash == false) )
@@ -106,6 +108,18 @@ downloadsDir.calcStats();
 console.dir(downloadsDir.filesPaths);
 console.dir(downloadsDir.filesStats);
 console.dir(downloadsDir.filesStats.sizeInHuman);
+
+notifySuccess(downloadsDir.filesStats);
+
+function notifySuccess(downloadsStats)
+{
+    notifier.notify({
+        title: 'Очистка системы',
+        message: `Удалено ${downloadsStats.count} файлов объемом ${downloadsStats.sizeInHuman}`,
+        sound: false,
+        wait: 5,
+    });
+}
 
 function init()
 {
